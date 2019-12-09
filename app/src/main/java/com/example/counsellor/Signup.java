@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.example.counsellor.R;
@@ -19,13 +20,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Signup extends AppCompatActivity {
 
     EditText txtName, txtEmail, txtPassword, txtConfirm, txtBio;
     Button btn_register;
    // ProgressBar pgbar;
+    RadioButton radioGenderMale, radioGenderFemale;
+    String gender;
     private FirebaseAuth firebaseAuth;
+    DatabaseReference databaseReference;
+    FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,20 +45,29 @@ public class Signup extends AppCompatActivity {
     txtConfirm = (EditText) findViewById(R.id.txt_confirmPassword);
     txtBio = (EditText) findViewById(R.id.txt_bio);
     btn_register = (Button) findViewById(R.id.btn_register);
-
+    radioGenderFemale =(RadioButton) findViewById(R.id.female);
+    radioGenderMale=(RadioButton) findViewById(R.id.male);
+    firebaseDatabase = FirebaseDatabase.getInstance();
     firebaseAuth = FirebaseAuth.getInstance();
-
+    databaseReference = FirebaseDatabase.getInstance().getReference("user");
 
 
     btn_register.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
-            String name = txtName.getText().toString();
-            String email = txtEmail.getText().toString();
+            final String name = txtName.getText().toString();
+            final String email = txtEmail.getText().toString();
             String password = txtPassword.getText().toString();
             String confirm = txtConfirm.getText().toString();
+            final String bio = txtBio.getText().toString();
 
+            if(radioGenderMale.isChecked()){
+                gender= "Male";
+            }
+            if(radioGenderFemale.isChecked()){
+                gender= "Female";
+            }
 
 
 
@@ -107,12 +123,26 @@ if(password.equals(confirm)){
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
 
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        user information = new user(
+                                name,
+                                email,
+                                bio,
+                                gender
+                        );
 
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        Toast.makeText(Signup.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                        databaseReference
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .setValue(information).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(Signup.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            }
+                        });
+
+
+
 
                     } else {
                         // If sign in fails, display a message to the user.
