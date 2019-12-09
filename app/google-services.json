@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "442522648721",
+    "firebase_url": "https://counsellor-58a9e.firebaseio.com",
+    "project_id": "counsellor-58a9e",
+    "storage_bucket": "counsellor-58a9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442522648721:android:7f524d3c712b5f744f3f30",
+        "android_client_info": {
+          "package_name": "com.example.counsellor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442522648721-osuor2pp89lki0vvb5j3r4u060qcsood.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.counsellor",
+            "certificate_hash": "b84b8a0e5e392684484e4fb86c51a7ca4396c63f"
+          }
+        },
+        {
+          "client_id": "442522648721-og6ujtkhs5bfdtsqnsthpotijuqvoc7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_7l3hw69pa5zXpaWPh8tq2ZQDicpJncg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442522648721-og6ujtkhs5bfdtsqnsthpotijuqvoc7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
