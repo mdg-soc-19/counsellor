@@ -1,21 +1,17 @@
 package com.example.counsellor;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.view.Menu;
-import android.view.MenuItem;
-
 
 
 import java.util.ArrayList;
@@ -24,11 +20,24 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private Spinner spinner;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    String[] myDataset = { " Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!5 lines 5 lines 5 lines 5 lines", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi","Hi" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        recyclerView = (RecyclerView) findViewById(R.id.the_wall);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter = new ProgrammingAdapter(myDataset);
+        recyclerView.setAdapter(mAdapter);
+
 
 
         getSupportActionBar().setTitle("CounselloR");
@@ -102,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
 
     }
