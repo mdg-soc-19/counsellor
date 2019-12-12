@@ -15,11 +15,10 @@ public class ProgrammingAdapter extends RecyclerView.Adapter<ProgrammingAdapter.
     private String[] data;
 
 
-    public ProgrammingAdapter(String[] myDataset ){
+    public ProgrammingAdapter(String[] myDataset) {
 
         data = myDataset;
     }
-
 
 
     @NonNull
@@ -38,7 +37,6 @@ public class ProgrammingAdapter extends RecyclerView.Adapter<ProgrammingAdapter.
         holder.question.setText(data[position]);
 
 
-
     }
 
     @Override
@@ -46,11 +44,12 @@ public class ProgrammingAdapter extends RecyclerView.Adapter<ProgrammingAdapter.
         return data.length;
     }
 
-    public static class ProgrammingViewHolder extends RecyclerView.ViewHolder{
+    public static class ProgrammingViewHolder extends RecyclerView.ViewHolder {
         ImageView user_img;
         TextView question;
         Button view_answer;
         Button answer;
+
         public ProgrammingViewHolder(View itemView) {
             super(itemView);
             user_img = (ImageView) itemView.findViewById(R.id.user_img);

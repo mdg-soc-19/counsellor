@@ -7,9 +7,11 @@
         <item>TV Series</item>
         <item>Campus Groups</item>
         <item>Litreature</item>
-        <item>Post Grad Exams</item>
+        <item>Post Graduation</item>
         <item>Travelling</item>
-        <item>Financial Aid</item>
+        <item>Finance</item>
+        <item>Research</item>
+        <item>Placements/Internships</item>
     </string-array>
     <string name="title_activity_profile__login">Sign in</string>
     <string name="prompt_email">Email</string>

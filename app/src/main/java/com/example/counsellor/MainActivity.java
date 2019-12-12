@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -23,12 +24,22 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    String[] myDataset = { " Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!", "Hi! My name is Naman. Yada yada yada yada yada yada yada yada! Checking for 5 lines check, check, check, check, check, check, check!5 lines 5 lines 5 lines 5 lines", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi", "Hi","Hi" };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        /*Intent intent = getIntent();
+        String question1 = intent.getStringExtra("question asked");
+        TextView textView = (TextView)findViewById(R.id.question);
+        textView.setText(question1);*/
+
+
+        String[] myDataset = { "question asked"};
 
 
         recyclerView = (RecyclerView) findViewById(R.id.the_wall);
@@ -39,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
 
-
         getSupportActionBar().setTitle("CounselloR");
         spinner = findViewById(R.id.spinner);
         List<String> categories = new ArrayList<>();
@@ -48,9 +58,11 @@ public class MainActivity extends AppCompatActivity {
         categories.add("TV Series");
         categories.add("Campus Groups");
         categories.add("Litreature");
-        categories.add("Post Grad Exams");
+        categories.add("Post Graduation");
         categories.add("Travelling");
-        categories.add("Financial Aid");
+        categories.add("Finance");
+        categories.add("Research");
+        categories.add("Placements/Internships");
         //Style the spinner
 
         ArrayAdapter<String> dataAdapter;
@@ -61,69 +73,72 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(dataAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if(parent.getItemAtPosition(position).equals("CATEGORIES!!")){
+                if (parent.getItemAtPosition(position).equals("CATEGORIES!!")) {
 
                     //do nothing
-                }
-
-                else {
+                } else {
                     String item = parent.getItemAtPosition(position).toString();
                     Toast.makeText(parent.getContext(), "Selected " + item, Toast.LENGTH_SHORT).show();
                 }
 
 
-                if(parent.getItemAtPosition(position).equals("Competitive Coding")){
+                if (parent.getItemAtPosition(position).equals("Competitive Coding")) {
                     Intent intent = new Intent(MainActivity.this, comp_coding.class);
                     startActivity(intent);
-                }
-                else if(parent.getItemAtPosition(position).equals("TV Series")){
+                } else if (parent.getItemAtPosition(position).equals("TV Series")) {
                     Intent intent = new Intent(MainActivity.this, tv_series.class);
                     startActivity(intent);
-                }
-                else if(parent.getItemAtPosition(position).equals("Campus Groups")){
+                } else if (parent.getItemAtPosition(position).equals("Campus Groups")) {
                     Intent intent = new Intent(MainActivity.this, campus_groups.class);
                     startActivity(intent);
-                }
-                else if(parent.getItemAtPosition(position).equals("Litreature")){
+                } else if (parent.getItemAtPosition(position).equals("Litreature")) {
                     Intent intent = new Intent(MainActivity.this, litr.class);
                     startActivity(intent);
-                }
-                else if(parent.getItemAtPosition(position).equals("Post Grad Exams")){
+                } else if (parent.getItemAtPosition(position).equals("Post Graduation")) {
                     Intent intent = new Intent(MainActivity.this, pg_exams.class);
                     startActivity(intent);
-                }
-                else if(parent.getItemAtPosition(position).equals("Travelling")){
+                } else if (parent.getItemAtPosition(position).equals("Travelling")) {
                     Intent intent = new Intent(MainActivity.this, travel.class);
                     startActivity(intent);
-                }
-                else if(parent.getItemAtPosition(position).equals("Financial Aid")){
+                } else if (parent.getItemAtPosition(position).equals("Finance")) {
                     Intent intent = new Intent(MainActivity.this, finance.class);
                     startActivity(intent);
+                } else if (parent.getItemAtPosition(position).equals("Placements/Internships")) {
+                    Intent intent = new Intent(MainActivity.this, PnI.class);
+                    startActivity(intent);
+                } else if (parent.getItemAtPosition(position).equals("Research")) {
+                    Intent intent = new Intent(MainActivity.this, Research.class);
+                    startActivity(intent);
                 }
-
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent){
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
 
+
     }
-    public void onClickNotification(View view){
+
+    public void onClickNotification(View view) {
         Intent intent = new Intent(this, notification.class);
         startActivity(intent);
     }
-    public void onClickProfile(View view){
+
+    public void onClickProfile(View view) {
 
         Intent intent = new Intent(this, Login_form.class);
         startActivity(intent);
     }
 
+    public void onClickAsk(View view) {
+        Intent intent = new Intent(this, ask.class);
+        startActivity(intent);
+    }
 
 
 }

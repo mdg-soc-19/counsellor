@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ask">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@android:style/Widget.Holo.Light.ActionBar.Solid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@android:color/holo_blue_light"
+            android:gravity="center"
+            android:text="ASK"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:text="Enter the question you want to ask:"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/txtAsk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:hint="No questions are Dumb!But please be polite :)" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="Choose Category:"
+            android:textSize="20sp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp">
+
+            <RadioButton
+                android:id="@+id/rdCompCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Competitive Coding" />
+
+            <RadioButton
+                android:id="@+id/rdTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TV Series" />
+
+            <RadioButton
+                android:id="@+id/rdCamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Campus Groups" />
+
+            <RadioButton
+                android:id="@+id/rdLitr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Litreature"/>
+            <RadioButton
+                android:id="@+id/rdPnI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Intenships/Placements"/>
+            <RadioButton
+                android:id="@+id/rdPG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Post Graduation"/>
+            <RadioButton
+                android:id="@+id/rdTravel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Travelling"/>
+            <RadioButton
+                android:id="@+id/rdFinance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Finance"/>
+            <RadioButton
+                android:id="@+id/rdResearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Research"/>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/ask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/holo_blue_light"
+            android:text="ASK"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+</ScrollView>
