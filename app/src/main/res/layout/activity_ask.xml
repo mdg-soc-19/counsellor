@@ -115,7 +115,8 @@
             android:layout_marginBottom="10dp"
             android:background="@android:color/holo_blue_light"
             android:text="ASK"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:onClick="onClickAsk2"/>
 
     </LinearLayout>
 

@@ -1,19 +1,31 @@
 package com.example.counsellor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    List<PostItems> postItemsList;
+    PostItems mPostItems;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +47,50 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        /*Intent intent = getIntent();
-        String question1 = intent.getStringExtra("question asked");
-        TextView textView = (TextView)findViewById(R.id.question);
-        textView.setText(question1);*/
-
-
-        String[] myDataset = { "question asked"};
-
 
         recyclerView = (RecyclerView) findViewById(R.id.the_wall);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ProgrammingAdapter(myDataset);
-        recyclerView.setAdapter(mAdapter);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Building 'THE WALL' .....");
+
+
+        postItemsList = new ArrayList<>();
+
+        final DatabaseReference databaseReference;
+        ValueEventListener eventListener;
+        final MyAdapter myAdapter = new MyAdapter(MainActivity.this,postItemsList);
+        recyclerView.setAdapter(myAdapter);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Questions");
+
+        progressDialog.show();
+        eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                postItemsList.clear();
+
+
+                for(DataSnapshot itemSnapshot: dataSnapshot.getChildren()){
+
+                    PostItems postItems = itemSnapshot.getValue(PostItems.class);
+
+                    postItemsList.add(postItems);
+
+                }
+
+                myAdapter.notifyDataSetChanged();
+                progressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    progressDialog.dismiss();
+            }
+        });
 
         getSupportActionBar().setTitle("CounselloR");
         spinner = findViewById(R.id.spinner);
@@ -121,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     public void onClickNotification(View view) {
@@ -137,6 +178,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickAsk(View view) {
         Intent intent = new Intent(this, ask.class);
+        startActivity(intent);
+    }
+
+    public void onClickAnswer(View view){
+        Intent intent = new Intent(this, answer.class);
+        startActivity(intent);
+    }
+
+    public void onClickViewAnswer(View view){
+        Intent intent = new Intent(this, answer.class);
         startActivity(intent);
     }
 
