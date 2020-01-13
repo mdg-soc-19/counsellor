@@ -2,21 +2,19 @@ package com.example.counsellor;
 
 public class PostItems {
 
-    private String itemQuestion;
-    private int itemImage;
-    private int itemButtonVA;
-    private int itemButtonA;
+    // public String category;
+    public String itemQuestion;
+    public int itemImage;
 
-    public PostItems(){
-        
+    public PostItems() {
+
     }
 
     public PostItems(String itemQuestion, int itemImage) {
         this.itemQuestion = itemQuestion;
         this.itemImage = itemImage;
-        this.itemButtonVA = itemButtonVA;
-        this.itemButtonA = itemButtonA;
     }
+
 
     public String getItemQuestion() {
         return itemQuestion;
@@ -26,11 +24,22 @@ public class PostItems {
         return itemImage;
     }
 
-   /* public int getItemButtonVA() {
-        return itemButtonVA;
+    public static class ChildLevel2 {
+        public String answer;
+
+        public ChildLevel2() {
+        }
+
+        public ChildLevel2(String answer) {
+            this.answer = answer;
+        }
+
+        public String getAnswer() {
+            return answer;
+        }
     }
 
-    public int getItemButtonA() {
-        return itemButtonA;
-    }*/
+
+
+
 }

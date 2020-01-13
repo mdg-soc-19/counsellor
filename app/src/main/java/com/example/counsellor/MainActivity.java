@@ -2,6 +2,7 @@ package com.example.counsellor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -39,19 +42,27 @@ public class MainActivity extends AppCompatActivity {
     List<PostItems> postItemsList;
     PostItems mPostItems;
     ProgressDialog progressDialog;
+    Toolbar myToolbar;
+    MenuItem item;
+    String question;
+    DataHolder dataHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setTitle("CounselloR");
+
 
 
 
 
         recyclerView = (RecyclerView) findViewById(R.id.the_wall);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
+        gridLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(gridLayoutManager);
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Building 'THE WALL' .....");
 
@@ -59,25 +70,25 @@ public class MainActivity extends AppCompatActivity {
         postItemsList = new ArrayList<>();
 
         final DatabaseReference databaseReference;
-        ValueEventListener eventListener;
         final MyAdapter myAdapter = new MyAdapter(MainActivity.this,postItemsList);
         recyclerView.setAdapter(myAdapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Questions");
 
         progressDialog.show();
-        eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+        ValueEventListener eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 postItemsList.clear();
 
 
-                for(DataSnapshot itemSnapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
 
                     PostItems postItems = itemSnapshot.getValue(PostItems.class);
-
                     postItemsList.add(postItems);
+                    question = (String) itemSnapshot.child("itemQuestion").getValue();
+                    //question = FirebaseDatabase.getInstance().getReference("Questions/itemQuestion").toString();
 
                 }
 
@@ -88,91 +99,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                    progressDialog.dismiss();
-            }
-        });
-
-        getSupportActionBar().setTitle("CounselloR");
-        spinner = findViewById(R.id.spinner);
-        List<String> categories = new ArrayList<>();
-        categories.add(0, "CATEGORIES!!");
-        categories.add("Competitive Coding");
-        categories.add("TV Series");
-        categories.add("Campus Groups");
-        categories.add("Litreature");
-        categories.add("Post Graduation");
-        categories.add("Travelling");
-        categories.add("Finance");
-        categories.add("Research");
-        categories.add("Placements/Internships");
-        //Style the spinner
-
-        ArrayAdapter<String> dataAdapter;
-        dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, categories);
-
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(dataAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if (parent.getItemAtPosition(position).equals("CATEGORIES!!")) {
-
-                    //do nothing
-                } else {
-                    String item = parent.getItemAtPosition(position).toString();
-                    Toast.makeText(parent.getContext(), "Selected " + item, Toast.LENGTH_SHORT).show();
-                }
-
-
-                if (parent.getItemAtPosition(position).equals("Competitive Coding")) {
-                    Intent intent = new Intent(MainActivity.this, comp_coding.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("TV Series")) {
-                    Intent intent = new Intent(MainActivity.this, tv_series.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("Campus Groups")) {
-                    Intent intent = new Intent(MainActivity.this, campus_groups.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("Litreature")) {
-                    Intent intent = new Intent(MainActivity.this, litr.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("Post Graduation")) {
-                    Intent intent = new Intent(MainActivity.this, pg_exams.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("Travelling")) {
-                    Intent intent = new Intent(MainActivity.this, travel.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("Finance")) {
-                    Intent intent = new Intent(MainActivity.this, finance.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("Placements/Internships")) {
-                    Intent intent = new Intent(MainActivity.this, PnI.class);
-                    startActivity(intent);
-                } else if (parent.getItemAtPosition(position).equals("Research")) {
-                    Intent intent = new Intent(MainActivity.this, Research.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                progressDialog.dismiss();
             }
         });
 
 
+        //postItemsList.clear();
+
+
+
     }
 
-    public void onClickNotification(View view) {
-        Intent intent = new Intent(this, notification.class);
-        startActivity(intent);
-    }
+
 
     public void onClickProfile(View view) {
 
-        Intent intent = new Intent(this, Login_form.class);
+        Intent intent = new Intent(this, UserInfo.class);
         startActivity(intent);
     }
 
@@ -181,14 +123,86 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickAnswer(View view){
+    /*public void onClickAnswer(View view){
         Intent intent = new Intent(this, answer.class);
+        intent.putExtra("question", question);
         startActivity(intent);
     }
 
-    public void onClickViewAnswer(View view){
+        public void onClickViewAnswer(View view){
         Intent intent = new Intent(this, answer.class);
+        intent.putExtra("question", question);
         startActivity(intent);
+    }*/
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+
+            case R.id.user_profile:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+
+                Intent intent2 = new Intent(this, UserInfo.class);
+                startActivity(intent2);
+                return true;
+
+            case R.id.Competitive_Coding:
+                Intent intent3 = new Intent(MainActivity.this, comp_coding.class);
+                startActivity(intent3);
+                return true;
+            case R.id.tv:
+                Intent intent4 = new Intent(MainActivity.this, tv_series.class);
+                startActivity(intent4);
+                return true;
+            case R.id.CampGrp:
+                Intent intent5 = new Intent(MainActivity.this, campus_groups.class);
+                startActivity(intent5);
+                return true;
+            case R.id.litr:
+                Intent intent6 = new Intent(MainActivity.this, litr.class);
+                startActivity(intent6);
+                return true;
+            case R.id.pg:
+                Intent intent7 = new Intent(MainActivity.this, pg_exams.class);
+                startActivity(intent7);
+                return true;
+            case R.id.travel:
+                Intent intent8 = new Intent(MainActivity.this, travel.class);
+                startActivity(intent8);
+                return true;
+            case R.id.fin:
+                Intent intent9 = new Intent(MainActivity.this, finance.class);
+                startActivity(intent9);
+                return true;
+            case R.id.research:
+                Intent intent10 = new Intent(MainActivity.this, Research.class);
+                startActivity(intent10);
+                return true;
+            case R.id.pni:
+                Intent intent11 = new Intent(MainActivity.this, PnI.class);
+                startActivity(intent11);
+                return true;
+
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                Toast.makeText(this, "Not Valid Choice!", Toast.LENGTH_SHORT).show();
+                return  true;
+
+        }
     }
 
 

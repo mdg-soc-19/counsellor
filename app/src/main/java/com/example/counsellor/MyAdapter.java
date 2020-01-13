@@ -14,6 +14,8 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -39,25 +41,32 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+
 
         holder.imageView.setImageResource(postItemsList.get(position).getItemImage());
         holder.mQuestion.setText(postItemsList.get(position).getItemQuestion());
-        /*holder.btn_answer.setOnClickListener(new View.OnClickListener() {
+        holder.btn_answer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                }
-
+                Intent intent = new Intent(mContext, answer.class);
+                intent.putExtra("question", postItemsList.get(holder.getAdapterPosition()).getItemQuestion());
+                mContext.startActivity(intent);
+            }
         });
         holder.btn_viewAns.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, answer.class);
+                intent.putExtra("question", postItemsList.get(holder.getAdapterPosition()).getItemQuestion());
+                mContext.startActivity(intent);
             }
-        });*/
-    }
 
+        });
+
+
+
+    }
     @Override
     public int getItemCount() {
         return postItemsList.size();
