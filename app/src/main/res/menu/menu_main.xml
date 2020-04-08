@@ -1,56 +1,16 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/user_profile" android:icon="@drawable/icon_user" app:showAsAction="always"   android:title="@string/user_profile"/>
-
+        android:id="@+id/action_search"
+        android:icon="@mipmap/action_search"
+        android:title="@android:string/search_go"
+        app:showAsAction="always" />
     <item
-        android:id="@+id/Competitive_Coding"
-        android:title="Competitive Coding"
-        app:showAsAction="never"
-        />
+        android:id="@+id/action_settings"
+        android:title="@string/account_settings" />
     <item
-        android:id="@+id/tv"
-        android:title="TV Series"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/CampGrp"
-        android:title="Campus Groups"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/litr"
-        android:title="Literature"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/pg"
-        android:title="Post Graduation"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/travel"
-        android:title="Travelling"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/fin"
-        android:title="Finance"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/research"
-        android:title="Research"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/pni"
-        android:title="Placements/Internships"
-        app:showAsAction="never"
-        />
-
-
-
+        android:id="@+id/action_logout"
+        android:title="@string/logout" />
 </menu>

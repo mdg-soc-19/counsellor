@@ -1,209 +1,192 @@
 package com.example.counsellor;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
+/*import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.transition.FragmentTransitionSupport;
+import android.support.v7.app.AppCompatActivity;*/
 import android.os.Bundle;
+
+// import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
+    private Toolbar toolBar;
+    FirebaseAuth mAuth;
+    FirebaseFirestore firebaseFirestore;
+    FloatingActionButton add_post_btn;
+    private  String user_id;
 
-    private Spinner spinner;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    List<PostItems> postItemsList;
-    PostItems mPostItems;
-    ProgressDialog progressDialog;
-    Toolbar myToolbar;
-    MenuItem item;
-    String question;
-    DataHolder dataHolder;
+    private BottomNavigationView bottomNavigationView;
+    private HomeFragment homeFragment;
+    private AccountFragment accountFragment;
+    private NotificationFragment notificationFragment;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+
+
+
+
+        toolBar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
         getSupportActionBar().setTitle("CounselloR");
 
+        mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
+
+        if(mAuth.getCurrentUser() != null) {
+
+
+            bottomNavigationView = findViewById(R.id.mainBottomNav);
+
+            homeFragment = new HomeFragment();
+            notificationFragment = new NotificationFragment();
+            accountFragment = new AccountFragment();
+
+            replaceFragment(homeFragment);
+
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+
+                        case R.id.bottomAccount:
+                            replaceFragment(accountFragment);
+                            return true;
+
+
+                       /* case R.id.bottomHome:
+                            replaceFragment(homeFragment);
+                            return true;*/
+
+
+                        case R.id.bottomNotification:
+                            replaceFragment(notificationFragment);
+                            return true;
+                    }
+                    return false;
+                }
+            });
 
 
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.the_wall);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
-        gridLayoutManager.setReverseLayout(true);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Building 'THE WALL' .....");
+            add_post_btn = findViewById(R.id.addPostButton);
 
+            add_post_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if (currentUser != null) {
+                        user_id = mAuth.getCurrentUser().getUid();
+                        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.getResult().exists()) {
+                                    Intent addPost = new Intent(MainActivity.this, ask.class);
+                                    startActivity(addPost);
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Please choose profile photo and name", Toast.LENGTH_LONG).show();
+                                    Intent main = new Intent(MainActivity.this, AccountSetup.class);
+                                    startActivity(main);
+                                }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(MainActivity.this, "Please choose profile photo and name", Toast.LENGTH_LONG).show();
+                        Intent main = new Intent(MainActivity.this, AccountSetup.class);
+                        startActivity(main);
+                    }
 
-        postItemsList = new ArrayList<>();
-
-        final DatabaseReference databaseReference;
-        final MyAdapter myAdapter = new MyAdapter(MainActivity.this,postItemsList);
-        recyclerView.setAdapter(myAdapter);
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Questions");
-
-        progressDialog.show();
-        ValueEventListener eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                postItemsList.clear();
-
-
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-
-                    PostItems postItems = itemSnapshot.getValue(PostItems.class);
-                    postItemsList.add(postItems);
-                    question = (String) itemSnapshot.child("itemQuestion").getValue();
-                    //question = FirebaseDatabase.getInstance().getReference("Questions/itemQuestion").toString();
 
                 }
-
-                myAdapter.notifyDataSetChanged();
-                progressDialog.dismiss();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                progressDialog.dismiss();
-            }
-        });
-
-
-        //postItemsList.clear();
-
-
-
-    }
-
-
-
-    public void onClickProfile(View view) {
-
-        Intent intent = new Intent(this, UserInfo.class);
-        startActivity(intent);
-    }
-
-    public void onClickAsk(View view) {
-        Intent intent = new Intent(this, ask.class);
-        startActivity(intent);
-    }
-
-    /*public void onClickAnswer(View view){
-        Intent intent = new Intent(this, answer.class);
-        intent.putExtra("question", question);
-        startActivity(intent);
-    }
-
-        public void onClickViewAnswer(View view){
-        Intent intent = new Intent(this, answer.class);
-        intent.putExtra("question", question);
-        startActivity(intent);
-    }*/
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-
-            case R.id.user_profile:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-
-                Intent intent2 = new Intent(this, UserInfo.class);
-                startActivity(intent2);
-                return true;
-
-            case R.id.Competitive_Coding:
-                Intent intent3 = new Intent(MainActivity.this, comp_coding.class);
-                startActivity(intent3);
-                return true;
-            case R.id.tv:
-                Intent intent4 = new Intent(MainActivity.this, tv_series.class);
-                startActivity(intent4);
-                return true;
-            case R.id.CampGrp:
-                Intent intent5 = new Intent(MainActivity.this, campus_groups.class);
-                startActivity(intent5);
-                return true;
-            case R.id.litr:
-                Intent intent6 = new Intent(MainActivity.this, litr.class);
-                startActivity(intent6);
-                return true;
-            case R.id.pg:
-                Intent intent7 = new Intent(MainActivity.this, pg_exams.class);
-                startActivity(intent7);
-                return true;
-            case R.id.travel:
-                Intent intent8 = new Intent(MainActivity.this, travel.class);
-                startActivity(intent8);
-                return true;
-            case R.id.fin:
-                Intent intent9 = new Intent(MainActivity.this, finance.class);
-                startActivity(intent9);
-                return true;
-            case R.id.research:
-                Intent intent10 = new Intent(MainActivity.this, Research.class);
-                startActivity(intent10);
-                return true;
-            case R.id.pni:
-                Intent intent11 = new Intent(MainActivity.this, PnI.class);
-                startActivity(intent11);
-                return true;
-
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                Toast.makeText(this, "Not Valid Choice!", Toast.LENGTH_SHORT).show();
-                return  true;
+            });
 
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser == null){
+            sendLogin();
+            finish();
+        }
+
+    }
+
+    private void sendLogin() {
+        Intent ash = new Intent(MainActivity.this,Login.class);
+        startActivity(ash);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                logOut();
+                return true;
+
+            case R.id.action_settings:
+                Intent acS = new Intent(MainActivity.this,AccountSetup.class);
+                startActivity(acS);
+
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    private void logOut() {
+        mAuth.signOut();
+        sendLogin();
+    }
+
+    //Fragment transition to change fragment when pressed
+    private void replaceFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container,fragment);
+        fragmentTransaction.commit();
+
+    }
 
 }

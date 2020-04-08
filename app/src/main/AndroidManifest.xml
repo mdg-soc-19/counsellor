@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.example.counsellor">
 
-    <dist:module dist:instant="true" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,34 +12,30 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".UserInfo"></activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".detailedAns" />
-        <activity android:name=".answer" />
-        <activity android:name=".Research" />
-        <activity android:name=".PnI" />
-        <activity android:name=".ask" />
-        <activity android:name=".MainEmptyActivity" />
-        <activity android:name=".Signup" />
-        <activity android:name=".finance" />
-        <activity android:name=".travel" />
-        <activity android:name=".pg_exams" />
-        <activity android:name=".litr" />
-        <activity android:name=".campus_groups" />
-        <activity android:name=".tv_series" />
-        <activity android:name=".comp_coding" />
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.login.Profile_Login"
-            android:label="@string/title_activity_profile__login" />
-        <activity android:name=".notification" />
-        <activity android:name=".Login_form">
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".splashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Login" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".register" />
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".AccountSetup" />
+        <activity
+            android:name=".ask"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".Comments" android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

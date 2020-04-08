@@ -1,123 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@mipmap/rectbg"
     tools:context=".ask">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarNewPost"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <TextView
-            style="@android:style/Widget.Holo.Light.ActionBar.Solid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="@android:color/holo_blue_light"
-            android:gravity="center"
-            android:text="ASK"
-            android:textColor="@android:color/white"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+        android:background="@android:color/holo_blue_dark"
+        android:minHeight="?android:attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="10dp"
-            android:text="Enter the question you want to ask:"
-            android:textSize="20sp" />
+    <ImageView
+        android:id="@+id/newPostImage"
+        android:layout_width="0dp"
+        android:layout_height="216dp"
+        android:layout_marginBottom="300dp"
+        android:background="@drawable/post_placeholder"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarNewPost"
+        app:layout_constraintVertical_bias="0.105" />
 
-        <EditText
-            android:id="@+id/txtAsk"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:hint="No questions are Dumb!But please be polite :)" />
+    <EditText
+        android:id="@+id/newPostDesc"
+        android:layout_width="331dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Add Description...."
+        android:inputType="textMultiLine"
+        android:textColor="@android:color/background_light"
+        android:textColorHint="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPostImage"
+        app:layout_constraintVertical_bias="0.177" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:text="Choose Category:"
-            android:textSize="20sp" />
+    <Button
+        android:id="@+id/newPostBtn"
+        android:layout_width="326dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="128dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@mipmap/rect3"
+        android:fontFamily="@font/acme"
+        android:text="Add Post"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPostDesc"
+        app:layout_constraintVertical_bias="0.056" />
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp">
+    <ProgressBar
+        android:id="@+id/newPostProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:progressTint="@color/colorAccent"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/newPostImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarNewPost" />
 
-            <RadioButton
-                android:id="@+id/rdCompCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Competitive Coding" />
-
-            <RadioButton
-                android:id="@+id/rdTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TV Series" />
-
-            <RadioButton
-                android:id="@+id/rdCamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Campus Groups" />
-
-            <RadioButton
-                android:id="@+id/rdLitr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Litreature"/>
-            <RadioButton
-                android:id="@+id/rdPnI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Intenships/Placements"/>
-            <RadioButton
-                android:id="@+id/rdPG"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Post Graduation"/>
-            <RadioButton
-                android:id="@+id/rdTravel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Travelling"/>
-            <RadioButton
-                android:id="@+id/rdFinance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Finance"/>
-            <RadioButton
-                android:id="@+id/rdResearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Research"/>
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/ask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="10dp"
-            android:background="@android:color/holo_blue_light"
-            android:text="ASK"
-            android:textColor="@android:color/white"
-            android:onClick="onClickAsk2"/>
-
-    </LinearLayout>
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
